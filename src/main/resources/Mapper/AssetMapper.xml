@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.AssetMapper">
+
+    <insert id="add">
+        INSERT INTO asset(assetNo, assetDescription, serialNo,
+        dateAcquired, currentValue, nextMaintenanceData, employeeNo, assetCategoryNo, statusNo, purchasePrice)VALUES
+(#{assetNo},#{assetDescription},#{serialNo},#{dateAcquired},#{currentValue},#{nextMaintenanceData},
+ #{employeeNo},#{assetCategoryNo},#{statusNo},#{purchasePrice});
+    </insert>
+    <update id="update">
+        update asset set assetNo=#{assetNo},assetDescription=#{assetDescription},serialNo=#{serialNo},
+                         dateAcquired=#{dateAcquired},currentValue=#{currentValue},nextMaintenanceData=#{nextMaintenanceData},employeeNo=#{employeeNo},
+                         assetCategoryNo=#{assetCategoryNo},statusNo=#{statusNo},purchasePrice=#{purchasePrice} where assetNo = #{assetNo};
+
+    </update>
+    <delete id="deleteByAssetNos">
+        delete from asset where assetNo in
+        <foreach collection="Anos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+    <select id="selectByPageAndCondition" resultType="pojo.Asset">
+        select * from asset <where>
+        <if test="a.assetNo != null and a.assetNo != ''">
+            and assetNo like #{a.assetNo}
+        </if>
+        <if test="a.assetDescription != null and a.assetDescription != ''">
+            and assetDescription like #{a.assetDescription}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from asset <where>
+        <if test="assetNo != null and assetNo != ''">
+            and assetNo like #{assetNo}
+        </if>
+        <if test="assetDescription != null and assetDescription != ''">
+            and assetDescription like #{assetDescription}
+        </if>
+    </where>
+    </select>
+</mapper>

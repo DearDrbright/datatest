@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.ServiceAgentMapper">
+
+    <insert id="add">
+        INSERT INTO serviceagent(agentNo, agentName, agentStreet, agentCity, agentState, agentZipCode,
+        agentTelNo, agentFaxNo, agentEmailAddress, agentWebAddress, contactName, contactTelNo, contactFaxNo,
+        contactEmailAddress)VALUES (#{agentNo},#{agentName},#{agentStreet},#{agentCity},#{agentState},#{agentZipCode},
+                                    #{agentTelNo},#{agentFaxNo},#{agentEmailAddress},#{agentWebAddress},
+                                    #{contactName},#{contactTelNo},#{contactFaxNo},#{contactEmailAddress});
+    </insert>
+    <update id="update">
+        update serviceagent set agentNo=#{agentNo},agentName=#{agentName},agentStreet=#{agentStreet},
+            agentCity=#{agentCity},agentState=#{agentState},agentZipCode=#{agentZipCode},agentTelNo=#{agentTelNo}
+                          ,agentFaxNo=#{agentFaxNo},agentEmailAddress=#{agentEmailAddress},agentWebAddress=#{agentWebAddress}
+                          ,contactName=#{contactName},contactTelNo=#{contactTelNo},contactFaxNo=#{contactFaxNo},contactEmailAddress=#{contactEmailAddress}
+        where agentNo = #{agentNo};
+    </update>
+    <delete id="deleteByServiceAgentNos">
+        delete from serviceagent where agentNo in
+        <foreach collection="sanos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <select id="selectByPageAndCondition" resultType="pojo.ServiceAgent">
+        select * from serviceagent <where>
+        <if test="sa.agentNo != null and sa.agentNo != ''">
+            and agentNo like #{sa.agentNo}
+        </if>
+        <if test="sa.agentName != null and sa.agentName != ''">
+            and agentName like #{sa.agentName}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from serviceagent <where>
+        <if test="agentNo != null and agentNo != ''">
+            and agentNo like #{agentNo}
+        </if>
+        <if test="agentName != null and agentName != ''">
+            and agentName like #{agentName}
+        </if>
+    </where>
+    </select>
+
+</mapper>

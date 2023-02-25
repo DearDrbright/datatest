@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.AssetCategoryMapper">
+    <insert id="add">
+        INSERT INTO assetcategory(assetCategoryNo,assetCategoryDescription)VALUES(#{assetCategoryNo}, #{assetCategoryDescription});
+    </insert>
+
+    <update id="update">
+        update assetcategory set assetCategoryNo=#{assetCategoryNo},assetCategoryDescription=#{assetCategoryDescription} where assetCategoryNo = #{assetCategoryNo};
+    </update>
+
+    <delete id="deleteByAssetCategoryNos">
+        delete from assetcategory where assetCategoryNo in
+        <foreach collection="Anos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+
+    <select id="selectByPageAndCondition" resultType="pojo.AssetCategory">
+        select * from assetcategory <where>
+        <if test="a.assetCategoryNo != null and a.assetCategoryNo != ''">
+            and assetCategoryNo like #{a.assetCategoryNo}
+        </if>
+        <if test="a.assetCategoryDescription != null and a.assetCategoryDescription != ''">
+            and assetCategoryDescription like #{a.assetCategoryDescription}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from assetcategory <where>
+        <if test="assetCategoryNo != null and assetCategoryNo != ''">
+            and assetCategoryNo like #{assetCategoryNo}
+        </if>
+        <if test="assetCategoryDescription != null and assetCategoryDescription != ''">
+            and assetCategoryDescription like #{assetCategoryDescription}
+        </if>
+        </where>
+    </select>
+</mapper>

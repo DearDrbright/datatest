@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.MaintenanceMapper">
+
+    <insert id="add">
+        INSERT INTO maintenance(maintenanceNo, maintenanceDate, maintenanceDescription, maintenanceCost,
+        assetNo, employeeNo, agentNo)VALUES(#{maintenanceNo},#{maintenanceDate},#{maintenanceDescription},
+            #{maintenanceCost},#{assetNo},#{employeeNo},#{agentNo})
+    </insert>
+    <update id="update">
+        update maintenance set maintenanceNo=#{maintenanceNo},maintenanceDate=#{maintenanceDate},maintenanceDescription=#{maintenanceDescription},
+                               maintenanceCost=#{maintenanceCost},assetNo=#{assetNo},employeeNo=#{employeeNo},agentNo=#{agentNo}
+        where maintenanceNo=#{maintenanceNo};
+    </update>
+    <delete id="deleteByMaintenanceNos">
+        delete from maintenance where maintenanceNo in
+        <foreach collection="mnos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+    <select id="selectByPageAndCondition" resultType="pojo.Maintenance">
+        select * from maintenance <where>
+        <if test="m.maintenanceNo != null and m.maintenanceNo != ''">
+            and maintenanceNo like #{e.maintenanceNo}
+        </if>
+        <if test="m.maintenanceDescription != null and m.maintenanceDescription != ''">
+            and maintenanceDescription like #{m.maintenanceDescription}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from maintenance <where>
+        <if test="maintenanceNo != null and maintenanceNo != ''">
+            and maintenanceNo like #{maintenanceNo}
+        </if>
+        <if test="maintenanceDescription != null and maintenanceDescription != ''">
+            and maintenanceDescription like #{maintenanceDescription}
+        </if>
+        </where>
+    </select>
+</mapper>

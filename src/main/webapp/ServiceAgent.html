@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ServiceAgent</title>
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+</head>
+<body>
+<div id="sa">
+    <!--搜索表单-->
+    <el-form :inline="true" :model="serviceagent" class="demo-form-inline">
+
+        <el-form-item label="代理编号">
+            <el-input v-model="serviceagent.agentNo" placeholder="代理编号"></el-input>
+        </el-form-item>
+
+        <el-form-item label="代理名称">
+            <el-input v-model="serviceagent.agentName" placeholder="代理名称"></el-input>
+        </el-form-item>
+
+        <!--按钮-->
+        <el-form-item><!--@click绑定事件-->
+            <el-button type="primary" @click="selectAll()">查询</el-button>
+        </el-form-item>
+    </el-form>
+
+    <!--按钮-->
+    <el-row>
+
+        <el-button type="danger" plain @click="deleteByServiceAgentNos">批量删除</el-button>
+        <el-button type="primary" plain @click="dialogVisible = true; dialogFlag = true">新增</el-button>
+
+    </el-row>
+
+    <!--添加数据对话框表单-->
+    <el-dialog
+            title="编辑信息"
+            :visible.sync="dialogVisible"
+            width="30%">
+
+        <el-form ref="form" :model="serviceagent" label-width="80px">
+
+            <el-form-item label="代理编号">
+                <el-input v-model="serviceagent.agentNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理名称">
+                <el-input v-model="serviceagent.agentName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理所在街道">
+                <el-input v-model="serviceagent.agentStreet"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理所在城市">
+                <el-input v-model="serviceagent.agentCity"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理所在州">
+                <el-input v-model="serviceagent.agentState"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理邮政编码">
+                <el-input v-model="serviceagent.agentZipCode"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理电话">
+                <el-input v-model="serviceagent.agentTelNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理传真">
+                <el-input v-model="serviceagent.agentFaxNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理邮箱地址">
+                <el-input v-model="serviceagent.agentEmailAddress"></el-input>
+            </el-form-item>
+
+            <el-form-item label="代理网址">
+                <el-input v-model="serviceagent.agentWebAddress"></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系名称">
+                <el-input v-model="serviceagent.contactName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系电话">
+                <el-input v-model="serviceagent.contactTelNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系传真">
+                <el-input v-model="serviceagent.contactFaxNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="联系邮箱地址">
+                <el-input v-model="serviceagent.contactEmailAddress"></el-input>
+            </el-form-item>
+
+            <el-form-item>
+                <el-button v-if="dialogFlag == true" type="primary" @click="addServiceAgent()">提交</el-button>
+                <el-button v-if="dialogFlag == false" type="primary" @click="updateServiceAgent()">修改</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+    <!--table-->
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange"><!--复选框选中后绑定-->
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    label="序号"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="agentNo"
+                    label="代理编号"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="agentName"
+                    label="代理名称"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentStreet"
+                    label="代理所在街道"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentCity"
+                    label="代理所在城市"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentState"
+                    label="代理所在州"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentZipCode"
+                    label="代理邮政编码"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentTelNo"
+                    label="代理电话"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentFaxNo"
+                    label="代理传真"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentEmailAddress"
+                    label="代理邮箱地址"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="agentWebAddress"
+                    label="代理网址"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="contactName"
+                    label="联系名称"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="contactTelNo"
+                    label="联系电话"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="contactFaxNo"
+                    label="联系传真"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="contactEmailAddress"
+                    label="联系邮箱地址"
+                    align="center">
+            </el-table-column>
+
+            <el-table-column
+                    label="操作"
+                    align="center">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="handleAlter(scope.row); reShow(scope.row);">修改</el-button>
+                        <el-button type="danger" @click="handleDelete(scope.row); deleteByServiceAgentNo()">删除</el-button>
+                    </el-row>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+
+    <!--分页工具条-->
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="5"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="100">
+    </el-pagination>
+
+</div>
+
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script src="js/axios-0.18.0.js"></script>
+<script>
+    new Vue({
+        //范围
+        el:"#sa",
+
+        //加载完成时执行
+        mounted(){
+            this.selectAll()
+        },
+
+        methods: {
+            // 查询所有
+            selectAll(){
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/ServiceAgent/selectByPageAndCondition?currentPage="+this.currentPage+"&pageSize="+this.pageSize,
+                    data:this.serviceagent
+                }).then(resp =>{
+                    //设置表格数据
+                    this.tableData = resp.data.rows; // {rows:[],totalCount:100}
+                    //设置总记录数
+                    this.totalCount = resp.data.totalCount;
+                })
+            },
+            // 添加数据
+            addServiceAgent() {
+                var _this = this;
+                _this.dialogFlag = false;//显示提交按钮
+                // 发送ajax请求，添加数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/ServiceAgent/add",
+                    data:_this.serviceagent
+                }).then(function (resp) {
+                    if(resp.data == "success"){//添加成功
+                        //关闭窗口
+                        _this.dialogVisible = false;
+
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，操作成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '操作不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+            //修改数据
+            reShow(row){//回显数据
+                var _this = this;
+                _this.dialogFlag = false;//显示修改按钮
+                _this.dialogVisible = true;
+                _this.serviceagent = row;
+            },
+            updateServiceAgent(){//修改
+                var _this = this;
+                // 发送ajax请求，更新数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/ServiceAgent/update",
+                    data:_this.serviceagent
+                }).then(function (resp) {
+                    if(resp.data == "success"){//更新成功
+                        //关闭窗口
+                        _this.dialogVisible = false;
+                        // 重新查询数据
+                        _this.selectAll();
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '更新成功',
+                            type: 'success'
+                        });
+                    }else{
+                        //更新失败
+                        _this.$message({
+                            message: '更新不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+
+            //单个删除
+            deleteByServiceAgentNo(){
+                var _this = this;
+
+                // 发送ajax请求，删除数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/ServiceAgent/deleteByServiceAgentNo",
+                    data:_this.deleteFlag.agentNo
+                }).then(function (resp) {
+                    if(resp.data == "success"){//删除成功
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，删除成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '删除不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+            //批量删除
+            deleteByServiceAgentNos() {
+                //创建selectSnos数组
+                for(let i = 0; i < this.multipleSelection.length; i++){
+                    let temp = this.multipleSelection[i];
+                    this.selectSnos[i] = temp.agentNo;
+                }
+                var _this = this;
+
+                // 发送ajax请求，删除数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/ServiceAgent/deleteByServiceAgentNos",
+                    data:_this.selectSnos
+                }).then(function (resp) {
+                    if(resp.data == "success"){//删除成功
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，删除成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '删除不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+
+            //设置表格行的颜色
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex % 3 === 1) {
+                    return 'warning-row';
+                } else if (rowIndex % 3 === 0) {
+                    return 'success-row';
+                }
+                else return '';
+            },
+            handleAlter(index/*, row*/) {
+                console.log(index/*, row*/);
+            },
+
+            //删除提取信息
+            handleDelete(/*index,*/ row) {
+                // console.log(/*index,*/ row);
+                this.deleteFlag = row;
+            },
+
+            // 复选框选中后执行的方法
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+                // console.log(this.multipleSelection)
+            },
+
+            //分页功能
+            // 重新设置每页显示的条数
+            handleSizeChange(val) {
+                // console.log(`每页 ${val} 条`);
+                this.pageSize  = val;
+                this.selectAll();
+            },
+            // 重新设置当前页码
+            handleCurrentChange(val) {
+                // console.log(`当前页: ${val}`);
+                this.currentPage  = val;
+                this.selectAll();
+            },
+
+
+        },
+
+        data() {
+            return {
+                //分页功能
+                // 每页显示的条数
+                pageSize:5,
+                // 总记录数
+                totalCount:100,
+                //当前页码
+                currentPage: 1,
+
+                // 添加数据对话框是否展示的标记
+                dialogVisible: false,
+                //弹窗按钮显示
+                dialogFlag:false,
+
+                //状态模型数据
+                serviceagent:{
+                    agentNo:"",
+                    agentName:"",
+                    agentStreet:"",
+                    agentCity:"",
+                    agentState:"",
+                    agentZipCode:"",
+                    agentTelNo:"",
+                    agentFaxNo:"",
+                    agentEmailAddress:"",
+                    agentWebAddress:"",
+                    contactName:"",
+                    contactTelNo:"",
+                    contactFaxNo:"",
+                    contactEmailAddress:""
+                },
+                //删除标记
+                deleteFlag:{
+                    agentNo:"",
+                    agentName:"",
+                    agentStreet:"",
+                    agentCity:"",
+                    agentState:"",
+                    agentZipCode:"",
+                    agentTelNo:"",
+                    agentFaxNo:"",
+                    agentEmailAddress:"",
+                    agentWebAddress:"",
+                    contactName:"",
+                    contactTelNo:"",
+                    contactFaxNo:"",
+                    contactEmailAddress:""
+                },
+
+                // 复选框选中数据集合
+                multipleSelection: [],
+                //被选中的估值编号集合
+                selectSnos:[],
+                //表格数据
+                tableData: [],
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

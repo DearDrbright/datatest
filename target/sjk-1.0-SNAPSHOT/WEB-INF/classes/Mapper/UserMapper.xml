@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    sql映射文件
+    namespace : 名称空间（自定义）    和结果类型一样不能写到java包那一层
+    名称空间需要和xml文件的源根路径一致
+    结果类型要和返回结果的源根路径一致
+-->
+<mapper namespace="Mapper.UserMapper">
+
+    <insert id="add">
+        insert into user(username, password) values(#{username}, #{password})
+    </insert>
+
+    <!--设置SQL映射文件的namespace属性为Mapper接口全限定名-->
+    <!-- 查询语句 -->
+    <select id="selectAll" resultType="pojo.User">
+        select * from user;
+    </select>
+    <select id="selectById" resultType="pojo.User">
+        select * from user where id = #{id};
+    </select>
+    <select id="selectByUsername" resultType="pojo.User">
+        select * from user where username = #{username};
+    </select>
+    <select id="selectByUser" resultType="pojo.User">
+        select * from user where username = #{username} and password = #{password};
+    </select>
+
+</mapper>

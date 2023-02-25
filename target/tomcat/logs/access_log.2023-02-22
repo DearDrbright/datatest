@@ -1,0 +1,14 @@
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:01 +0800] "GET /sjk HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:01 +0800] "GET /sjk/ HTTP/1.1" 304 - http-bio-8080-exec-3 7
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:01 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-2 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:02 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=1&pageSize=5 HTTP/1.1" 200 439 http-bio-8080-exec-4 506
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:27 +0800] "GET /sjk/base.html HTTP/1.1" 200 1231 http-bio-8080-exec-6 2
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:32 +0800] "GET /sjk/Valuation.html HTTP/1.1" 200 14805 http-bio-8080-exec-7 1
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:12:32 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=1&pageSize=5 HTTP/1.1" 200 439 http-bio-8080-exec-8 7
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:14:19 +0800] "POST /sjk/Valuation/add HTTP/1.1" 200 - http-bio-8080-exec-10 23
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:23 +0800] "GET /sjk HTTP/1.1" 302 - http-bio-8080-exec-1 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:24 +0800] "GET /favicon.ico HTTP/1.1" 404 - http-bio-8080-exec-2 0
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:24 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=1&pageSize=5 HTTP/1.1" 200 439 http-bio-8080-exec-3 506
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:29 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=2&pageSize=5 HTTP/1.1" 200 26 http-bio-8080-exec-5 6
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:30 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=1&pageSize=5 HTTP/1.1" 200 439 http-bio-8080-exec-6 4
+0:0:0:0:0:0:0:1 - - [22/Feb/2023:15:36:44 +0800] "POST /sjk/Valuation/selectByPageAndCondition?currentPage=1&pageSize=5 HTTP/1.1" 200 163 http-bio-8080-exec-7 5

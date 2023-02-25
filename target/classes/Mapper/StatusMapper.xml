@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.StatusMapper">
+    <insert id="add">
+        INSERT INTO status (statusNo, statusDescription) VALUES (#{statusNo}, #{statusDescription});
+    </insert>
+    <update id="update">
+        update status set statusNo=#{statusNo},statusDescription=#{statusDescription} where statusNo = #{statusNo};
+    </update>
+    <delete id="deleteByStatusNos">
+        delete from status where statusNo in
+        <foreach collection="Snos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+    <select id="selectByPageAndCondition" resultType="pojo.Status">
+        select * from status <where>
+        <if test="s.statusNo != null and s.statusNo != ''">
+            and statusNo like #{s.statusNo}
+        </if>
+        <if test="s.statusDescription != null and s.statusDescription != ''">
+            and statusDescription like #{s.statusDescription}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from status <where>
+        <if test="statusNo != null and statusNo != ''">
+            and statusNo like #{statusNo}
+        </if>
+        <if test="statusDescription != null and statusDescription != ''">
+            and statusDescription like #{statusDescription}
+        </if>
+    </where>
+    </select>
+</mapper>

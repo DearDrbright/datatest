@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0">
+<!--    修改首次展示页面-->
+    <welcome-file-list>
+        <!--按以下顺序搜索展示，找到就停止-->
+<!--        <welcome-file>index.jsp</welcome-file>-->
+        <welcome-file>Valuation.html</welcome-file>
+        <welcome-file>login.html</welcome-file>
+        <welcome-file>register.html</welcome-file>
+    </welcome-file-list>
+</web-app>

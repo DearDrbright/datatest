@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee</title>
+    <style>
+        .el-table .warning-row {
+            background: oldlace;
+        }
+
+        .el-table .success-row {
+            background: #f0f9eb;
+        }
+    </style>
+</head>
+<body>
+<div id="emp">
+    <!--搜索表单-->
+    <el-form :inline="true" :model="employee" class="demo-form-inline">
+
+        <el-form-item label="员工编号">
+            <el-input v-model="employee.employeeNo" placeholder="状态编号"></el-input>
+        </el-form-item>
+
+        <el-form-item label="姓名">
+            <el-input v-model="employee.position" placeholder="姓名"></el-input>
+        </el-form-item>
+
+        <!--按钮-->
+        <el-form-item><!--@click绑定事件-->
+            <el-button type="primary" @click="selectAll()">查询</el-button>
+        </el-form-item>
+    </el-form>
+
+    <!--按钮-->
+    <el-row>
+
+        <el-button type="danger" plain @click="deleteByEmployeeNos">批量删除</el-button>
+        <el-button type="primary" plain @click="dialogVisible = true; dialogFlag = true">新增</el-button>
+
+    </el-row>
+
+    <el-dialog
+            title="编辑信息"
+            :visible.sync="dialogVisible"
+            width="30%">
+        <el-form ref="form" :model="employee" label-width="80px">
+
+            <el-form-item label="员工编号">
+                <el-input v-model="employee.employeeNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="标题">
+                <el-input v-model="employee.title"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工名">
+                <el-input v-model="employee.firstName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工中名">
+                <el-input v-model="employee.middleName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工姓">
+                <el-input v-model="employee.lastName"></el-input>
+            </el-form-item>
+
+            <el-form-item label="家庭地址">
+                <el-input v-model="employee.address"></el-input>
+            </el-form-item>
+
+            <el-form-item label="工作电话">
+                <el-input v-model="employee.workTelExt"></el-input>
+            </el-form-item>
+
+            <el-form-item label="家庭电话">
+                <el-input v-model="employee.homeTelNo"></el-input>
+            </el-form-item>
+
+            <el-form-item label="Emall地址">
+                <el-input v-model="employee.empEmallAddress"></el-input>
+            </el-form-item>
+
+            <el-form-item label="社保号码">
+                <el-input v-model="employee.soclalSecurityNumber"></el-input>
+            </el-form-item>
+
+            <el-form-item label="出生日期">
+                <el-input v-model="employee.dOB"></el-input>
+            </el-form-item>
+
+            <el-form-item label="员工姓名">
+                <el-input v-model="employee.position"></el-input>
+            </el-form-item>
+
+            <el-form-item label="性别">
+                <el-input v-model="employee.sex"></el-input>
+            </el-form-item>
+
+            <el-form-item label="薪水">
+                <el-input v-model="employee.salary"></el-input>
+            </el-form-item>
+
+            <el-form-item label="工作领域">
+                <el-input v-model="employee.dateStarted"></el-input>
+            </el-form-item>
+
+
+            <el-form-item>
+                <el-button v-if="dialogFlag == true" type="primary" @click="addEmployee()">提交</el-button>
+                <el-button v-if="dialogFlag == false" type="primary" @click="updateEmployee()">修改</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+        </el-form>
+    </el-dialog>
+
+    <!--表格-->
+    <template>
+        <el-table
+                :data="tableData"
+                style="width: 100%"
+                :row-class-name="tableRowClassName"
+                @selection-change="handleSelectionChange"><!--复选框选中后绑定-->
+            <el-table-column
+                    type="selection"
+                    width="55">
+            </el-table-column>
+            <el-table-column
+                    type="index"
+                    label="序号"
+                    width="50">
+            </el-table-column>
+            <el-table-column
+                    prop="employeeNo"
+                    label="员工编号"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="title"
+                    label="标题"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="firstName"
+                    label="员工名"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="middleName"
+                    label="员工中名"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="lastName"
+                    label="员工姓"
+                    align="center">
+            </el-table-column>
+            <el-table-column
+                    prop="address"
+                    label="家庭地址"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="workTelExt"
+                    label="工作电话"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="homeTelNo"
+                    label="家庭电话"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="empEmallAddress"
+                    label="Emall地址"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="soclalSecurityNumber"
+                    label="社保号码"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="dOB"
+                    label="出生日期"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="position"
+                    label="员工姓名"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="sex"
+                    label="性别"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="salary"
+                    label="薪水"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    prop="dateStarted"
+                    label="工作领域"
+                    align="center"
+            >
+            </el-table-column>
+            <el-table-column
+                    label="操作"
+                    align="center">
+                <template slot-scope="scope">
+                    <el-row>
+                        <el-button type="primary" @click="handleAlter(scope.row); reShow(scope.row);">修改</el-button>
+                        <el-button type="danger" @click="handleDelete(scope.row); deleteByEmployeeNo()">删除</el-button>
+                    </el-row>
+                </template>
+            </el-table-column>
+        </el-table>
+    </template>
+
+    <!--分页工具条-->
+    <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="5"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="100">
+    </el-pagination>
+
+</div>
+<script src="js/vue.js"></script>
+<script src="element-ui/lib/index.js"></script>
+<link rel="stylesheet" href="element-ui/lib/theme-chalk/index.css">
+
+<script src="js/axios-0.18.0.js"></script>
+<script>
+    new Vue({
+        el:"#emp",
+        mounted(){
+            this.selectAll()
+        },
+        methods:{
+            tableRowClassName({row, rowIndex}) {
+                if (rowIndex % 3 === 1) {
+                    return 'warning-row';
+                } else if (rowIndex % 3 === 0) {
+                    return 'success-row';
+                }
+                else return '';
+            },
+            handleDelete(/*index,*/ row) {
+                // console.log(/*index,*/ row);
+                this.deleteFlag = row;
+            },
+            handleSelectionChange(val) {
+                this.multipleSelection = val;
+                // console.log(this.multipleSelection)
+            },
+            handleSizeChange(val) {
+                // console.log(`每页 ${val} 条`);
+                this.pageSize  = val;
+                this.selectAll();
+            },
+            // 重新设置当前页码
+            handleCurrentChange(val) {
+                // console.log(`当前页: ${val}`);
+                this.currentPage  = val;
+                this.selectAll();
+            },
+
+            // 查询所有
+            selectAll(){
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/Employee/selectByPageAndCondition?currentPage="+this.currentPage+"&pageSize="+this.pageSize,
+                    data:this.employee
+                }).then(resp =>{
+                    //设置表格数据
+                    this.tableData = resp.data.rows; // {rows:[],totalCount:100}
+                    //设置总记录数
+                    this.totalCount = resp.data.totalCount;
+                })
+            },
+            // 添加数据
+            addEmployee() {
+                var _this = this;
+                _this.dialogFlag = false;//显示提交按钮
+                // 发送ajax请求，添加数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/Employee/add",
+                    data:_this.employee
+                }).then(function (resp) {
+                    if(resp.data == "success"){//添加成功
+                        //关闭窗口
+                        _this.dialogVisible = false;
+
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，操作成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '操作不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+            //修改数据
+            reShow(row){//回显数据
+                var _this = this;
+                _this.dialogFlag = false;//显示修改按钮
+                _this.dialogVisible = true;
+                _this.employee = row;
+            },
+            updateEmployee(){//修改
+                var _this = this;
+                // 发送ajax请求，更新数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/Employee/update",
+                    data:_this.employee
+                }).then(function (resp) {
+                    if(resp.data == "success"){//更新成功
+                        //关闭窗口
+                        _this.dialogVisible = false;
+                        // 重新查询数据
+                        _this.selectAll();
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '更新成功',
+                            type: 'success'
+                        });
+                    }else{
+                        //更新失败
+                        _this.$message({
+                            message: '更新不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+
+            //单个删除
+            deleteByEmployeeNo(){
+                var _this = this;
+
+                // 发送ajax请求，删除数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/Employee/deleteByEmployeeNo",
+                    data:_this.deleteFlag.employeeNo
+                }).then(function (resp) {
+                    if(resp.data == "success"){//删除成功
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，删除成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '删除不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+            //批量删除
+            deleteByEmployeeNos() {
+                //创建selectEnos数组
+                for(let i = 0; i < this.multipleSelection.length; i++){
+                    let temp = this.multipleSelection[i];
+                    this.selectEnos[i] = temp.employeeNo;
+                }
+                var _this = this;
+
+                // 发送ajax请求，删除数据
+                axios({
+                    method:"post",
+                    url:"http://localhost:8080/sjk/Employee/deleteByEmployeeNos",
+                    data:_this.selectEnos
+                }).then(function (resp) {
+                    if(resp.data == "success"){//删除成功
+                        // 重新查询数据
+                        _this.selectAll();
+
+                        // 弹出消息提示
+                        _this.$message({
+                            message: '恭喜你，删除成功',
+                            type: 'success'
+                        });
+
+                    }else{
+                        //添加失败
+                        _this.$message({
+                            message: '删除不成功，可能存在某些约束',
+                            type: 'warning'
+                        });
+                    }
+                })
+            },
+            handleAlter(index/*, row*/) {
+                console.log(index/*, row*/);
+            },
+
+        },
+        data(){
+            return{
+                // 每页显示的条数
+                pageSize:5,
+                // 总记录数
+                totalCount:100,
+                //当前页码
+                currentPage: 1,
+
+                // 添加数据对话框是否展示的标记
+                dialogVisible: false,
+                //弹窗按钮显示
+                dialogFlag:false,
+
+                //状态模型数据
+                employee:{
+                    employeeNo : "",
+                    title:"",
+                    firstName:"",
+                    middleName:"",
+                    lastName:"",
+                    address:"",
+                    workTelExt:"",
+                    homeTelNo:"",
+                    empEmallAddress:"",
+                    soclalSecurityNumber:"",
+                    dOB:"",
+                    position:"",
+                    sex:"",
+                    salary:"",
+                    dateStarted:""
+                },
+                //删除标记
+                deleteFlag:{
+                    employeeNo : "",
+                    title:"",
+                    firstName:"",
+                    middleName:"",
+                    lastName:"",
+                    address:"",
+                    workTelExt:"",
+                    homeTelNo:"",
+                    empEmallAddress:"",
+                    soclalSecurityNumber:"",
+                    dOB:"",
+                    position:"",
+                    sex:"",
+                    salary:"",
+                    dateStarted:""
+                },
+
+                // 复选框选中数据集合
+                multipleSelection: [],
+                //被选中的估值编号集合
+                selectEnos:[],
+                //表格数据
+                tableData: [],
+            }
+        }
+    })
+</script>
+</body>
+</html>

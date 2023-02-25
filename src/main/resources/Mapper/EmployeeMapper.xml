@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mapper.EmployeeMapper">
+
+    <insert id="add">
+        INSERT INTO employee(employeeNo, title, firstName, middleName, lastName, address, workTelExt, homeTelNo, empEmallAddress,
+        soclalSecurityNumber, dOB, position, sex, salary, dateStarted)VALUES(#{employeeNo},#{title},#{firstName},#{middleName},#{lastName},#{address},
+        #{workTelExt},#{homeTelNo},#{empEmallAddress},#{soclalSecurityNumber},#{dOB},#{position},#{sex},#{salary},#{dateStarted});
+    </insert>
+    <update id="update">
+        update employee set employeeNo=#{employeeNo},title=#{title},firstName=#{firstName},
+                            middleName=#{middleName},lastName=#{lastName},address=#{address},workTelExt=#{workTelExt}
+                ,homeTelNo=#{homeTelNo},empEmallAddress=#{empEmallAddress},soclalSecurityNumber=#{soclalSecurityNumber}
+                          ,dOB=#{dOB},position=#{position},sex=#{sex},salary=#{salary},dateStarted=#{dateStarted}
+        where employeeNo = #{employeeNo};
+    </update>
+    <delete id="deleteByEmployeeNos">
+        delete from employee where employeeNo in
+        <foreach collection="Enos" item="no" separator="," open="(" close=")">
+            #{no}
+        </foreach>
+    </delete>
+    <select id="selectByPageAndCondition" resultType="pojo.Employee">
+        select * from employee <where>
+        <if test="e.employeeNo != null and e.employeeNo != ''">
+            and employeeNo like #{e.employeeNo}
+        </if>
+        <if test="e.position != null and e.position != ''">
+            and position like #{e.position}
+        </if>
+    </where>
+        limit #{begin}, #{size}
+    </select>
+    <select id="selectTotalCountByCondition" resultType="java.lang.Integer">
+        select count(*) from employee <where>
+        <if test="employeeNo != null and employeeNo != ''">
+            and employeeNo like #{employeeNo}
+        </if>
+        <if test="position != null and position != ''">
+            and position like #{position}
+        </if>
+    </where>
+    </select>
+
+</mapper>
